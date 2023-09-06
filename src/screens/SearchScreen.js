@@ -1,19 +1,60 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView} from 'react-native';
 import SearchBar from '../components/SearchBar';
-import { useState } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import useResults from '../hooks/useResults';
 import ResultsList from '../components/ResultsList';
+import { requestForegroundPermissionsAsync, Accuracy, watchPositionAsync } from 'expo-location';
+import LocationContext from '../LocationContext';
 
 
-const SearchScreen = ({}) => {
+
+const locationWorker = async (setErrorMessage, setLocation) => {
+    collectPermission(setErrorMessage);
+    detectLocation(setLocation);
+
+}
+
+const collectPermission = async(setErrorMessage) => {
+    
+    try {
+        const { granted } = await requestForegroundPermissionsAsync();
+        
+        if (!granted) {    
+            setErrorMessage("We need your location to show you around.")
+        }
+    }
+    catch(err) {
+        setErrorMessage(err);
+    }
+}
+
+const detectLocation = async(setLocation) => {
+    
+    watchPositionAsync({
+        accuracy: Accuracy.BestForNavigation,
+        distanceInterval: 10
+    },  (location) => { 
+        setLocation(location)});
+    
+
+}
 
 
+
+const SearchScreen = ({navigation}) => {
     const [userSearch, setUserSearch] = useState('');
-    const [errorMessage, searchAPI, best, good, bad] = useResults();
+    const [setErrorMessage, errorMessage, searchAPI, best, good, bad] = useResults();
+    const {location, setLocation} = useContext(LocationContext);
+
+    console.log("SS Rerender, location: ", location);
+
+    useEffect(() => {
+        locationWorker(setErrorMessage, setLocation);
+    }, []);
 
     return (
-        <>
+        <> 
             <SearchBar 
                 userSearch = { userSearch } 
                 change = { (x) => setUserSearch(x)}
@@ -45,6 +86,7 @@ const SearchScreen = ({}) => {
         </>
     )
 };
+
 
 const styles = StyleSheet.create({
     mainStyle: {

@@ -1,31 +1,41 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import yelp from '../../api/yelp';
+import LocationContext from "../LocationContext";
 
 export default () => {
     const [results, setResults] = useState([]);
     const [errorMessage, setErrorMessage] = useState('');
+    const {location} = useContext(LocationContext);
     let best = [];
     let good = [];
     let bad = [];
 
-    const searchAPI = async (searchTerm) => {
-        try {
-        const response = await yelp.get('/search', {
-            params: {
-                limit: 50,
-                term:  searchTerm ,
-                location: 'Dublin',
-                sort_by: 'distance',
-                open_now: true,
-                radius: 2000
-            }
-        });
-        setResults(response.data.businesses);
-        filterByRate();
 
-        } catch (err) {
-            setErrorMessage('Something went wrong');
-        }
+    const searchAPI = async (searchTerm) => {
+        
+            try {
+                const response = await yelp.get('/search', {
+                    params: {
+                        limit: 50,
+                        term:  searchTerm ,
+                        latitude: location.coords.latitude,
+                        longitude: location.coords.longitude,
+                        sort_by: 'distance',
+                        open_now: true,
+                        
+                    }
+                });
+                setResults(response.data.businesses);
+                console.log("Results received");
+
+                filterByRate();
+                console.log("Results received for best ", best);
+
+                } catch (err) {
+                    setErrorMessage('Something went wrong');
+                }
+        
+        
     };
 
     const filterByRate = () => {
@@ -50,7 +60,10 @@ export default () => {
 
     useEffect(() => {
         searchAPI('dinner');
-    }, []);
+    }, [location]);
 
-    return [errorMessage, searchAPI, best, good, bad];
+    console.log("useResults called, location: ", location);
+    console.log("useResults called, best: ", best);
+
+    return [setErrorMessage, errorMessage, searchAPI, best, good, bad, setErrorMessage];
 };
