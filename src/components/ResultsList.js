@@ -4,7 +4,9 @@ import ResultDetail from './ResultDetail';
 import { withNavigation } from 'react-navigation';
 
 const ResultsList = ({name, list, navigation}) => {
-    if (list.length != 0){
+
+    if (list && list.length !== 0) {
+
     return(
         <View style = {styles.viewStyle}>
             <Text style = {styles.textStyle}>{name}</Text>
