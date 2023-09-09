@@ -1,11 +1,9 @@
-import React, { useContext, createContext, useState } from 'react';
+import React, { useContext, createContext,  useReducer } from 'react';
 
 const LocationContext = createContext();
 
 export const LocationContextProvider = ({children}) => {
-    const [location, setLocation] = useState(null);
-
-
+    const [state, dispatch] = useReducer(reducer, {location, errorMessage, isTracking});
 
     return(<LocationContext.Provider value = {{location, setLocation}}>{children}</LocationContext.Provider>)
 };
