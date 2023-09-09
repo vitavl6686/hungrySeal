@@ -4,16 +4,15 @@ import LocationContext from "../LocationContext";
 
 export default () => {
     const [results, setResults] = useState([]);
-    const [errorMessage, setErrorMessage] = useState('');
-    const {location} = useContext(LocationContext);
+    
+    const {location,  setErrorMessage} = useContext(LocationContext);
     let best = [];
     let good = [];
     let bad = [];
 
 
     const searchAPI = async (searchTerm) => {
-        
-            try {
+        try {
                 const response = await yelp.get('/search', {
                     params: {
                         limit: 50,
@@ -26,19 +25,18 @@ export default () => {
                     }
                 });
                 setResults(response.data.businesses);
-                console.log("Results received");
-
                 filterByRate();
-                console.log("Results received for best ", best);
-
-                } catch (err) {
-                    setErrorMessage('Something went wrong');
-                }
+            }
+        catch(err) {
+            setErrorMessage('Nothing was found.');
+        };
+                
         
         
     };
 
     const filterByRate = () => {
+
         for (i = 0; i < results.length; i++) {
             if (results[i].rating >= 4.5) {
                 best.push(results[i]);
@@ -62,8 +60,5 @@ export default () => {
         searchAPI('dinner');
     }, [location]);
 
-    console.log("useResults called, location: ", location);
-    console.log("useResults called, best: ", best);
-
-    return [setErrorMessage, errorMessage, searchAPI, best, good, bad, setErrorMessage];
+    return [ searchAPI, best, good, bad];
 };

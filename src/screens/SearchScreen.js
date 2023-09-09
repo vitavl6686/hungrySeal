@@ -12,17 +12,15 @@ import LocationContext from '../LocationContext';
 const locationWorker = async (setErrorMessage, setLocation) => {
     collectPermission(setErrorMessage);
     detectLocation(setLocation);
-
-}
+};
 
 const collectPermission = async(setErrorMessage) => {
-    
     try {
         const { granted } = await requestForegroundPermissionsAsync();
         
         if (!granted) {    
             setErrorMessage("We need your location to show you around.")
-        }
+        };
     }
     catch(err) {
         setErrorMessage(err);
@@ -30,13 +28,16 @@ const collectPermission = async(setErrorMessage) => {
 }
 
 const detectLocation = async(setLocation) => {
-    
+    try {
     watchPositionAsync({
         accuracy: Accuracy.BestForNavigation,
         distanceInterval: 10
     },  (location) => { 
         setLocation(location)});
-    
+    }
+    catch(err) {
+        setErrorMessage('There was an error processing your location.');
+    };
 
 }
 
@@ -44,17 +45,15 @@ const detectLocation = async(setLocation) => {
 
 const SearchScreen = ({navigation}) => {
     const [userSearch, setUserSearch] = useState('');
-    const [setErrorMessage, errorMessage, searchAPI, best, good, bad] = useResults();
-    const {location, setLocation} = useContext(LocationContext);
-
-    console.log("SS Rerender, location: ", location);
-
+    const [searchAPI, best, good, bad] = useResults();
+    const {setLocation, setErrorMessage, errorMessage} = useContext(LocationContext);
+    
     useEffect(() => {
         locationWorker(setErrorMessage, setLocation);
     }, []);
-
     return (
         <> 
+
             <SearchBar 
                 userSearch = { userSearch } 
                 change = { (x) => setUserSearch(x)}
@@ -65,22 +64,24 @@ const SearchScreen = ({navigation}) => {
                     }
                 }
             />
-            {errorMessage ? <Text style = {{color: 'red'}}>{errorMessage}</Text> : null }
+            {errorMessage ? <Text style = {{color: 'red'}}>{ errorMessage }</Text> : null }
 
             {bad.length == 0 && good.length == 0 && best.length == 0 
                 ? <Text style= {{fontSize: 25}}>Nothing is found</Text> : null}
+
             <ScrollView>
+
             <ResultsList 
                 name = "Very Good" 
-                list = {best} 
+                list = { best } 
             />
             <ResultsList 
                 name = "Bit Worse" 
-                list = {good}
+                list = { good }
             />
             <ResultsList 
                 name = "Avoid" 
-                list = {bad}
+                list = { bad }
             />
             </ScrollView>
         </>
