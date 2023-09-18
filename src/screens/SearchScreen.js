@@ -21,6 +21,7 @@ const SearchScreen = ({navigation}) => {
     
 
     useEffect(() => {
+        console.log('hi')
         locationWorker(setErrorMessage, setLocation);
     }, []);
     return (
