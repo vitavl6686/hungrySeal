@@ -1,72 +1,46 @@
-import React from 'react';
-import { View, Text, StyleSheet, ScrollView} from 'react-native';
-import SearchBar from '../components/SearchBar';
-import { useState, useEffect, useContext } from 'react';
-import useResults from '../hooks/useResults';
-import ResultsList from '../components/ResultsList';
-import { requestForegroundPermissionsAsync, Accuracy, watchPositionAsync } from 'expo-location';
+import React, { useState, useEffect, useContext } from 'react';
+import { StyleSheet, ScrollView, StatusBar, Text, View, } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+
+import { Entypo } from '@expo/vector-icons'; 
+
 import LocationContext from '../LocationContext';
+import useResults from '../hooks/useResults';
+import useLocation from '../hooks/useLocation';
+import SearchBlock from '../components/SearchBlock';
+import ResultsList from '../components/ResultsList';
 
-
-
-const locationWorker = async (setErrorMessage, setLocation) => {
-    collectPermission(setErrorMessage);
-    detectLocation(setLocation);
-};
-
-const collectPermission = async(setErrorMessage) => {
-    try {
-        const { granted } = await requestForegroundPermissionsAsync();
-        
-        if (!granted) {    
-            setErrorMessage("We need your location to show you around.")
-        };
-    }
-    catch(err) {
-        setErrorMessage(err);
-    }
-}
-
-const detectLocation = async(setLocation) => {
-    try {
-    watchPositionAsync({
-        accuracy: Accuracy.BestForNavigation,
-        distanceInterval: 10
-    },  (location) => { 
-        setLocation(location)});
-    }
-    catch(err) {
-        setErrorMessage('There was an error processing your location.');
-    };
-
-}
-
-
+const StatusBarHeight = StatusBar.currentHeight;
 
 const SearchScreen = ({navigation}) => {
     const [userSearch, setUserSearch] = useState('');
     const [searchAPI, best, good, bad] = useResults();
+    const [locationWorker] = useLocation();
     const {setLocation, setErrorMessage, errorMessage} = useContext(LocationContext);
+   
     
+
     useEffect(() => {
+        console.log('hi')
         locationWorker(setErrorMessage, setLocation);
     }, []);
     return (
-        <> 
-
-            <SearchBar 
-                userSearch = { userSearch } 
-                change = { (x) => setUserSearch(x)}
-                onSubmit = {() => 
-                    {
-                    searchAPI(userSearch)
-                    this.textInput.clear();
-                    }
-                }
+        <View style = {styles.mainView}> 
+             
+            <SearchBlock 
+                setUserSearch= {setUserSearch} 
+                userSearch = {userSearch} 
+                searchAPI = {searchAPI}
+                relocate = {() => locationWorker(setErrorMessage, setLocation)}
             />
+            
+            <TouchableOpacity onPress={() => {navigation.navigate("Map")}}>
+                <Entypo style = {styles.map} name="map" size={30} color="black" />
+            </TouchableOpacity>
+
             {errorMessage ? <Text style = {{color: 'red'}}>{ errorMessage }</Text> : null }
 
-            {bad.length == 0 && good.length == 0 && best.length == 0 
+            {bad.length === 0 && good.length === 0 && best.length === 0 
                 ? <Text style= {{fontSize: 25}}>Nothing is found</Text> : null}
 
             <ScrollView>
@@ -84,15 +58,23 @@ const SearchScreen = ({navigation}) => {
                 list = { bad }
             />
             </ScrollView>
-        </>
+        </View>
     )
 };
 
+SearchScreen.navigationOptions = ({ navigation }) => {
+    return {
+        headerShown: false
+    }
+};
 
 const styles = StyleSheet.create({
-    mainStyle: {
-        backgroundColor: 'white',
-        flex: 1
+    mainView: {
+        flex: 1,
+        top: StatusBarHeight,
+    },
+    map: {
+        marginHorizontal: 20
     }
 });
 

@@ -8,6 +8,7 @@ export const LocationContextProvider = ({children}) => {
     const reducer = (state, action) => {
         switch(action.type) {
             case "set_location": {
+                console.log("Got a location in context")
                 return {...state, location: action.payload}
             };  
             case "set_error_message": {
@@ -15,7 +16,7 @@ export const LocationContextProvider = ({children}) => {
             };
         }
     }
-    const [state, dispatch] = useReducer(reducer, {location: null, errorMessage: '', isTracking: false});
+    const [state, dispatch] = useReducer(reducer, {location: null, errorMessage: ''});
 
     const setLocation = (location) =>  {
         dispatch({type: "set_location", payload: location});

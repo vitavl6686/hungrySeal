@@ -57,7 +57,7 @@ export default () => {
     filterByRate();
 
     useEffect(() => {
-        searchAPI('dinner');
+        searchAPI('');
     }, [location]);
 
     return [ searchAPI, best, good, bad];
