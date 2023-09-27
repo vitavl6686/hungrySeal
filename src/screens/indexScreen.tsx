@@ -1,16 +1,20 @@
 import React, {useState} from 'react';
 import { View, StyleSheet, StatusBar, FontVariant, ScrollView } from 'react-native';
 import { Text, ButtonGroup } from '@rneui/themed';
+
 import SearchBarCustom from '../components/index/searchBar';
 import SearchButton from '../components/index/searchButton';
 import Block from '../components/index/block';
+
+import useSearchResults from '../hooks/useSearchResults';
 
 const notificationBarHeight = StatusBar.currentHeight;
 
 
 const IndexScreen = ({navigation}) => {
     
-    
+    const [coffee, dinner, bar] = useSearchResults();
+
     return(
         <ScrollView style = {styles.main}>
             <View style = { styles.block }>
@@ -26,15 +30,15 @@ const IndexScreen = ({navigation}) => {
             </View>
 
             <View style = { styles.block }>
-            <Block name={"Coffee and pastries"} />
+            <Block name={"Coffee and pastries"} data = { coffee } />
             </View>
 
             <View style = { styles.block }>
-            <Block name={"Dinner"} />
+            <Block name={"Dinner"} data = { dinner } />
             </View>
             
             <View style = { styles.block }>
-            <Block name={"Bars"} />
+            <Block name={"Bars"} data = { bar } />
             </View>
         </ScrollView>
     );

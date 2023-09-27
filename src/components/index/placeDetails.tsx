@@ -3,14 +3,16 @@ import { View, StyleSheet, Image } from 'react-native';
 
 import { Text, ButtonGroup } from '@rneui/themed';
 
-const PlaceDetails = ({name}) => {
+const PlaceDetails = ({data}) => {
     return(
         <View style = {styles.mainFrame}>
             <Image
-                source = {require('../../../assets/test_image_1.jpeg')}
+                source = {{uri: data.image_url}}
                 style = {styles.image}
             />
-            <Text style = { styles.placeName }>{ name }</Text>
+            <Text style = { styles.placeName }>{ data.name}</Text>
+            <Text style = { styles.details }>Rating: {data.rating}</Text>
+            <Text style = { styles.details }>Number of reviews: { data.review_count}</Text>
         </View>
     );
 };
@@ -33,6 +35,13 @@ const styles = StyleSheet.create({
         fontVariant: 'small-caps' as any ,
         letterSpacing: 0.2,
         fontSize: 20,
+        fontWeight: '600'
+    },
+
+    details: {
+        
+        letterSpacing: 0.2,
+        fontSize: 18,
     }
 });
 

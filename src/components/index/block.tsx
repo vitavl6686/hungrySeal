@@ -1,12 +1,12 @@
 import React from "react";
-import { StyleSheet, View, Image, ScrollView } from "react-native";
+import { StyleSheet, View, Image, ScrollView, FlatList } from "react-native";
 import { Text, ButtonGroup } from '@rneui/themed';
 
 import PlaceDetails from "./placeDetails";
 
 
 
-const Block = ({name}) => {
+const Block = ({name, data}) => {
     return(
         <View>
             <View style = {styles.block}>
@@ -14,8 +14,19 @@ const Block = ({name}) => {
             </View>
             <View >
                 <ScrollView horizontal>
-                    <PlaceDetails name = "Grove road cafe" />
-                    <PlaceDetails name = "Vita and Alex cafes" />
+                    <FlatList 
+                        horizontal
+                        data={ data }
+                        keyExtractor={(restaurant) => restaurant.id}
+                        renderItem= {({item}) => {
+                            return(
+                                <View>
+                                    <PlaceDetails data = {item} />
+                                </View>
+                        );}}
+                    
+                    />
+                   
                 </ScrollView>
             </View>
 
