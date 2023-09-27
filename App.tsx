@@ -1,12 +1,13 @@
 import * as React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationAction, NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from 'react-navigation-stack';
-import { createAppContainer } from 'react-navigation';
+import { NavigationScreenProp, createAppContainer } from 'react-navigation';
+import { NavigationProp } from '@react-navigation/native';
 
 import IndexScreen from './src/screens/indexScreen';
 
 
-const navigation = createStackNavigator({
+const navigation= createStackNavigator({
   index: IndexScreen
   }, {
     initialRouteName: 'index'
