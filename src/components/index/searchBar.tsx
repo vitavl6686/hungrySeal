@@ -1,23 +1,35 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, TextInput, TextStyle, StyleProp} from 'react-native';
 import { Ionicons } from '@expo/vector-icons'; 
+import useSearchResults from '../../hooks/useSearchResults';
+import { NavigationStackProp } from 'react-navigation-stack';
 
 
 
 
-
-const SearchBarCustom = () => {
+const SearchBarCustom = ({navigation}: {navigation: NavigationStackProp}) => {
+    const [userSearch, setUserSearch] = useState("");
+    const { searchAPI, general } = useSearchResults();
+    useEffect(() => console.log("US changed", userSearch), [userSearch])
     return(
         <View style = {styles.layout}>
             <Ionicons name="search-outline" size={40} color="black" />
             <TextInput
                 autoCapitalize='none'
-                blurOnSubmit
+                autoCorrect = {false}
                 cursorColor = 'grey'
                 inputMode = 'text'
                 maxLength = {50}
                 placeholder = "Yummy food around the corner"
                 style = {styles.input as any}
+
+                value= {userSearch}
+                onChangeText={(new_text) => setUserSearch(new_text)}
+                onSubmitEditing={async (request) => {
+                                    await searchAPI(request.nativeEvent.text, null);
+                                    navigation.navigate('generalSearch', {term: userSearch, found: general});
+                                }}
+                
 
             />
 

@@ -1,15 +1,25 @@
 import { useEffect, useState, useContext } from "react";
 import yelp from '../../api/yelp';
 
+export type  EateryInfo = {
+    id: string
+    name: string
+    image_url: string
+    rating: number
+    review_count: number
+}
+
 export default () => {
-    const [coffee, setCoffee] = useState<object>([]);
-    const [dinner, setDinner] = useState<object>([]);
-    const [bar, setBar] = useState<object>([]);
-    const [general, setGeneral] = useState<object>([]);
+    const [coffee, setCoffee] = useState<Array<EateryInfo>>([]);
+    const [dinner, setDinner] = useState<Array<EateryInfo>>([]);
+    const [bar, setBar] = useState<Array<EateryInfo>>([]);
+    const [general, setGeneral] = useState<Array<EateryInfo>>([]);
 
-
-
-    const searchAPI = async (searchTerm: String, callback: Function) => {
+ 
+    const searchAPI = async (searchTerm: String, callback: Function | null) => {
+        if (callback == null){
+            callback = setGeneral;
+        }
         try {
                 const response = await yelp.get('/search', {
                     params: {
@@ -35,8 +45,8 @@ export default () => {
     };
 
     useEffect(() => { firstRun() }, [] );
-    useEffect(() => console.log(bar), [ bar ]);
 
-    return [coffee, dinner, bar];
+
+    return {coffee, dinner, bar, general, searchAPI};
 
 };
