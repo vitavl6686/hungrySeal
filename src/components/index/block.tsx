@@ -1,21 +1,21 @@
 import React from "react";
 import { StyleSheet, View, Image, ScrollView, FlatList } from "react-native";
 import { Text, ButtonGroup } from '@rneui/themed';
-
 import PlaceDetails from "./placeDetails";
+import { EateryInfo } from "../../hooks/useSearchResults";
 
 
 
-const Block = ({name, data}) => {
+const Block = ({name, data, _horizontal}: {name: string, data: Array<EateryInfo>, _horizontal: boolean}) => {
     return(
         <View>
             <View style = {styles.block}>
             <Text h4 style = { styles.blockName }>{ name }</Text>
             </View>
             <View >
-                <ScrollView horizontal>
+                
                     <FlatList 
-                        horizontal
+                        horizontal= {_horizontal}
                         data={ data }
                         keyExtractor={(restaurant) => restaurant.id}
                         renderItem= {({item}) => {
@@ -27,7 +27,6 @@ const Block = ({name, data}) => {
                     
                     />
                    
-                </ScrollView>
             </View>
 
         </View>

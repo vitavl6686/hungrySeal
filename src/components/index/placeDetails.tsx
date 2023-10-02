@@ -2,8 +2,9 @@ import React from 'react';
 import { View, StyleSheet, Image } from 'react-native';
 
 import { Text, ButtonGroup } from '@rneui/themed';
+import { EateryInfo } from '../../hooks/useSearchResults';
 
-const PlaceDetails = ({data}) => {
+const PlaceDetails = ({data}: {data: EateryInfo}) => {
     return(
         <View style = {styles.mainFrame}>
             <Image
