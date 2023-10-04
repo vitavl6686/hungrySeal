@@ -31,11 +31,12 @@ export default () => {
                     }
                 });
                 callback(response.data.businesses);
-                
+                return 0;
             }
         catch(err) {
             console.log(err);
         };
+
     };
 
     const firstRun = () => {

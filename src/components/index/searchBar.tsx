@@ -23,14 +23,12 @@ const SearchBarCustom = ({navigation}: {navigation: NavigationStackProp}) => {
                 placeholder = "Yummy food around the corner"
                 style = {styles.input as any}
 
-                value= {userSearch}
-                onChangeText={(new_text) => setUserSearch(new_text)}
-                onSubmitEditing={async (request) => {
-                                    await searchAPI(request.nativeEvent.text, null);
-                                    navigation.navigate('generalSearch', {term: userSearch, found: general});
-                                }}
-                
-
+                value = {userSearch}
+                onChangeText = {(new_text) => setUserSearch(new_text)}
+                onSubmitEditing = { () => {
+                    setUserSearch("");
+                    navigation.navigate('generalSearch', {term: userSearch});
+                    }}
             />
 
         </View>

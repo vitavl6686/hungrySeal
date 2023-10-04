@@ -1,46 +1,67 @@
 import React from 'react';
-import { View, StyleSheet, Image } from 'react-native';
+import { View, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { NavigationStackProp } from 'react-navigation-stack';
 
-import { Text, ButtonGroup } from '@rneui/themed';
+import { Text } from '@rneui/themed';
 import { EateryInfo } from '../../hooks/useSearchResults';
 
-const PlaceDetails = ({data}: {data: EateryInfo}) => {
+
+const PlaceDetails = ({data, imageStyle, navigation}: {data: EateryInfo, imageStyle: object, navigation: NavigationStackProp}) => {
+    var displayed_name = "";
+    if (data.name.length > 20) {displayed_name = data.name.substring(0, 17) + "..."} else {displayed_name = data.name};
+
     return(
-        <View style = {styles.mainFrame}>
-            <Image
-                source = {{uri: data.image_url}}
-                style = {styles.image}
-            />
-            <Text style = { styles.placeName }>{ data.name}</Text>
-            <Text style = { styles.details }>Rating: {data.rating}</Text>
-            <Text style = { styles.details }>Number of reviews: { data.review_count}</Text>
+        <View style={ styles.outer }>
+            <TouchableOpacity
+                onPress={() => navigation.navigate('place', {id: data.id})}>
+                <View style = {[styles.mainContent, styles.elevation]}>
+                    <Image
+                        source = {{ uri: data.image_url }}
+                        style = { imageStyle }
+                    />
+                    <View style = {styles.textView }>
+                        <Text style = { styles.placeName }>{ displayed_name }</Text>
+                        <Text style = { styles.details }>Rating: {data.rating}</Text>
+                        <Text style = { styles.details }>Number of reviews: { data.review_count}</Text>
+                    </View>
+                </View>
+            </TouchableOpacity>
         </View>
     );
 };
 
 const styles = StyleSheet.create({
-    mainFrame: {
-        width: 300,
-        margin: 5,
-        marginLeft: 0
+    outer: {
+        margin: 6,
     },
 
-    image: {
-        height: 160,
-        width: 300,
-        opacity: 0.8,
+    mainContent: {
+        width: '100%',
+        marginHorizontal: 6,
+        marginLeft: 0,
+        backgroundColor: 'white',
         borderRadius: 10
+        
+    },
+
+    elevation: {
+        elevation: 5,
+        shadowColor: 'black',
+    },
+
+    textView: {
+        borderRadius: 10,
+        margin: 5
     },
 
     placeName: {
         fontVariant: 'small-caps' as any ,
         letterSpacing: 0.2,
-        fontSize: 20,
+        fontSize: 18,
         fontWeight: '600'
     },
 
     details: {
-        
         letterSpacing: 0.2,
         fontSize: 18,
     }

@@ -23,24 +23,13 @@ const IndexScreen = ({navigation}: {navigation: NavigationStackProp}) => {
             </View>
 
             <View style = { styles.block }>
-            <SearchBarCustom navigation = {navigation}/>
+                <SearchBarCustom navigation = {navigation}/>
             </View>
 
-            <View style = { styles.block }>
-            <SearchButton />
-            </View>
-
-            <View style = { styles.block }>
-            <Block name={"Coffee and pastries"} data = { coffee } _horizontal = { true } />
-            </View>
-
-            <View style = { styles.block }>
-            <Block name={"Dinner"} data = { dinner } _horizontal = { true } />
-            </View>
+            <Block name={"Coffee and pastries"} data = { coffee } navigation = { navigation } />
+            <Block name={"Dinner"} data = { dinner } navigation = { navigation } />
+            <Block name={"Bars"} data = { bar } navigation = { navigation } />
             
-            <View style = { styles.block }>
-            <Block name={"Bars"} data = { bar } _horizontal = { true } />
-            </View>
         </ScrollView>
     );
 };
@@ -50,6 +39,7 @@ IndexScreen.navigationOptions = {headerShown: true, title: "", headerStyle :{hei
 const styles = StyleSheet.create({
     main: {
         flex: 0,
+        backgroundColor: 'white'
     },
    
     greeting: {
@@ -58,7 +48,8 @@ const styles = StyleSheet.create({
     },
 
     block: {
-        margin: 5
+        marginVertical: 5,
+        marginHorizontal: 4
     }
 });
 
