@@ -31,8 +31,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 4,
-        elevation: 3,
-        backgroundColor: '#cfd1d4',
+        elevation: 3
     },
     text: {
         fontSize: 16,
@@ -48,6 +47,8 @@ const styles = StyleSheet.create({
         borderRadius: 4,
         elevation: 3,
         backgroundColor: 'white',
+        borderColor: 'black',
+        borderWidth: 0.5
     },
 
     

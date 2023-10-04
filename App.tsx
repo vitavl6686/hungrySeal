@@ -6,10 +6,12 @@ import { NavigationProp } from '@react-navigation/native';
 
 import IndexScreen from './src/screens/indexScreen';
 import GeneralSearchScreen from './src/screens/generalSearchScreen';
+import PlaceScreen from './src/screens/placeScreen';
 
 const navigation= createStackNavigator({
   index: IndexScreen,
   generalSearch: GeneralSearchScreen,
+  place: PlaceScreen
   }, {
     initialRouteName: 'index'
   })
