@@ -1,6 +1,8 @@
 import React from 'react';
-import { View, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Image, TouchableOpacity, FlatList } from 'react-native';
 import { NavigationStackProp } from 'react-navigation-stack';
+
+
 
 import { Text } from '@rneui/themed';
 import { EateryInfo } from '../../hooks/useSearchResults';
@@ -9,6 +11,8 @@ import { EateryInfo } from '../../hooks/useSearchResults';
 const PlaceDetails = ({data, imageStyle, navigation}: {data: EateryInfo, imageStyle: object, navigation: NavigationStackProp}) => {
     var displayed_name = "";
     if (data.name.length > 20) {displayed_name = data.name.substring(0, 17) + "..."} else {displayed_name = data.name};
+
+    
 
     return(
         <View style={ styles.outer }>
@@ -21,6 +25,7 @@ const PlaceDetails = ({data, imageStyle, navigation}: {data: EateryInfo, imageSt
                     />
                     <View style = {styles.textView }>
                         <Text style = { styles.placeName }>{ displayed_name }</Text>
+
                         <Text style = { styles.details }>Rating: {data.rating}</Text>
                         <Text style = { styles.details }>Number of reviews: { data.review_count}</Text>
                     </View>
