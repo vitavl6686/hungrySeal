@@ -1,21 +1,20 @@
-import React, {useEffect, useState} from 'react';
-import { View, StyleSheet, StatusBar, FontVariant, ScrollView } from 'react-native';
+import React, { useEffect } from 'react';
+import { NavigationStackProp } from 'react-navigation-stack';
+import { View, StyleSheet, ScrollView } from 'react-native';
 import { Text, ButtonGroup } from '@rneui/themed';
 
 import SearchBarCustom from '../components/index/searchBar';
-import SearchButton from '../components/index/searchButton';
 import Block from '../components/index/block';
 
-import useSearchResults from '../hooks/useSearchResults';
-import { NavigationNavigator, NavigationProp, NavigationScreenProp, NavigationState } from 'react-navigation';
-import { NavigationStackProp } from 'react-navigation-stack';
+import useSearchResults, { EateryInfo } from '../hooks/useSearchResults';
+import useLocation from '../hooks/useLocation';
 
-const notificationBarHeight = StatusBar.currentHeight;
 
 
 const IndexScreen = ({navigation}: {navigation: NavigationStackProp}) => {
     
-    const {coffee, dinner, bar} = useSearchResults();
+    const { coffee, dinner, bar } = useSearchResults();
+    useLocation();
     return(
         <ScrollView style = {styles.main}>
             <View style = { styles.block }>
@@ -34,7 +33,7 @@ const IndexScreen = ({navigation}: {navigation: NavigationStackProp}) => {
     );
 };
 
-IndexScreen.navigationOptions = {headerShown: true, title: "", headerStyle :{height: 40}} ;
+IndexScreen.navigationOptions = {headerShown: true, title: "", headerStyle :{ height: 40 }} ;
 
 const styles = StyleSheet.create({
     main: {
