@@ -1,18 +1,24 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { NavigationStackProp } from "react-navigation-stack";
 import { FlatList, View, StyleSheet } from "react-native";
 import { Text, ButtonGroup } from '@rneui/themed';
 
-import useSearchResults from "../hooks/useSearchResults";
+import locationContext from "../context/locationContext";
+import useSearchResults, { EateryInfo } from "../hooks/useSearchResults";
 import Block from "../components/search/block";
 import PlaceDetails from "../components/index/placeDetails";
 
 
+
 const GeneralSearchScreen = ({navigation}: {navigation: NavigationStackProp}) => {
     const name = navigation.getParam('term');
-    const { searchAPI, general } = useSearchResults();
+    const { searchAPI } = useSearchResults();
+    const { location } = useContext(locationContext).locationState;
 
-    useEffect(() => { searchAPI(name, null) }, []);
+    const [general, setGeneral]: [EateryInfo[], Function] = useState(null);
+
+
+    useEffect(() => { searchAPI(name, setGeneral, location.coords.latitude, location.coords.longitude) }, []);
     
     return(
         <View style = {{flex: 1}}>

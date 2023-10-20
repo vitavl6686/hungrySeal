@@ -12,9 +12,7 @@ const notificationBarHeight = StatusBar.currentHeight;
 const PlaceScreen =  ({ navigation }: {navigation: NavigationStackProp}) => {
     const id: String = navigation.getParam('id');
     const { placeDetails } = useSearchPlace(id);
- 
 
-    useEffect(() => console.log(placeDetails), [ placeDetails ])
     return(
         <View style = { styles.mainFrame }>
 
@@ -33,13 +31,14 @@ const PlaceScreen =  ({ navigation }: {navigation: NavigationStackProp}) => {
             }
 
             <View style = {{flexDirection: "row"}}>
-                <Entypo name="dot-single" size={24} color="black" />
+
                 <FlatList 
-                    horizontal
+
                     data={ placeDetails.categories }
                     renderItem= {({item}) => {
                         return(
                             <View style = {{flexDirection: "row"}}>
+                                <Entypo name="dot-single" size={24} color="black" />
                                 <Text style = { styles.categories }> { item.title}</Text> 
                                 <Entypo name="dot-single" size={24} color="black" />
                              </View>

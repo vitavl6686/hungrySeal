@@ -24,20 +24,21 @@ export default () => {
     const getLocation = async() => {
         const responce = await getCurrentPositionAsync({ accuracy: Accuracy.BestForNavigation });
         setLocation(responce);
+        console.log('location detected again')
     }
 
-    const onAwake = async () => {
+    const locationWorker = async () => {
         permissionCollector();
         getLocation();
     }
 
+    
+
     useEffect(() => {
-        onAwake();
-    }, []);
+        console.log('location changed')
+        }, [location]);
 
-    useEffect(() => {console.log(location)}, [location]);
-
-    return;
+    return { locationWorker };
 }
     
 
