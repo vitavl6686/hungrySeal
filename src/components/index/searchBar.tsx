@@ -9,8 +9,6 @@ import { NavigationStackProp } from 'react-navigation-stack';
 
 const SearchBarCustom = ({navigation}: {navigation: NavigationStackProp}) => {
     const [userSearch, setUserSearch] = useState("");
-    const { searchAPI, general } = useSearchResults();
-    useEffect(() => console.log("US changed", userSearch), [userSearch])
     return(
         <View style = {styles.layout}>
             <Ionicons name="search-outline" size={40} color="black" />
@@ -21,9 +19,9 @@ const SearchBarCustom = ({navigation}: {navigation: NavigationStackProp}) => {
                 inputMode = 'text'
                 maxLength = {50}
                 placeholder = "Yummy food around the corner"
-                style = {styles.input as any}
+                style = { styles.input as any }
 
-                value = {userSearch}
+                value = { userSearch }
                 onChangeText = {(new_text) => setUserSearch(new_text)}
                 onSubmitEditing = { () => {
                     setUserSearch("");
