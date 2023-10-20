@@ -28,6 +28,7 @@ const PlaceDetails = ({data, imageStyle, navigation}: {data: EateryInfo, imageSt
 
                         <Text style = { styles.details }>Rating: {data.rating}</Text>
                         <Text style = { styles.details }>Number of reviews: { data.review_count}</Text>
+                        <Text>Distance: { data.coordinates.distance }</Text>
                     </View>
                 </View>
             </TouchableOpacity>

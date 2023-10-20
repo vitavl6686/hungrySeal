@@ -10,6 +10,9 @@ export type  EateryInfo = {
     image_url: string
     rating: number
     review_count: number
+    coordinates: {
+        distance: number
+    }
 }
 
 
@@ -18,16 +21,19 @@ export default () => {
     const { locationState } = useContext(locationContext);
     const { location } = locationState
 
-    const [coffee, setCoffee] = useState<Array<EateryInfo>>([]);
-    const [dinner, setDinner] = useState<Array<EateryInfo>>([]);
-    const [bar, setBar] = useState<Array<EateryInfo>>([]);
-    const [general, setGeneral] = useState<Array<EateryInfo>>([]);
 
- 
+    const MIN_RATING = 3.5;
+
+    const clean_results = (initial: EateryInfo[]) => {
+        const result: EateryInfo[] = [];
+        initial.forEach((x) => {
+            if ( x.rating >= MIN_RATING ) {
+                result.push(x);
+            }});
+        return result;
+    };
+
     const searchAPI = async (searchTerm: String, callback: Function | null, latitude: Number | undefined, longitude: Number |  undefined ) => {
-        if (callback === null){
-            callback = setGeneral;
-        }
 
         if (longitude === undefined || latitude === undefined) {
             try {
@@ -41,8 +47,9 @@ export default () => {
                             location: 'Dublin',
                         }
                     });
-                    console.log(response)
-                    callback(response.data.businesses);
+                    const final_result : EateryInfo[] = clean_results(response.data.businesses);
+                    console.log(final_result[2].coordinates)
+                    callback(final_result);
                     return 0;
                 }
             catch(err) {
@@ -52,19 +59,19 @@ export default () => {
 
         else {
             try {
-                console.log('request')
                     const response = await yelp.get('/search', {
                         params: {
-                            limit: 10,
+                            limit: 20,
+                            radius: 5000,
                             term:  searchTerm ,
-                            sort_by: 'rating',
+                            sort_by: 'distance',
                             open_now: true,
                             longitude: longitude,
                             latitude: latitude
                         }
                     });
-                    console.log(response)
-                    callback(response.data.businesses);
+                    const final_result : EateryInfo[] = clean_results(response.data.businesses);
+                    callback(final_result);
                     return 0;
                 }
             catch(err) {
@@ -74,22 +81,6 @@ export default () => {
 
     };
 
-    const firstRun = () => {
-        if (location) {
-            searchAPI('coffee', setCoffee, location.coords.latitude, location.coords.latitude);
-            searchAPI('dinner', setDinner, location.coords.latitude, location.coords.latitude);
-            searchAPI('bar', setBar, location.coords.latitude, location.coords.latitude);
-        }
-        else {
-            searchAPI('coffee', setCoffee, undefined, undefined);
-            searchAPI('dinner', setDinner, undefined, undefined);
-            searchAPI('bar', setBar, undefined, undefined);
-        }
-    };
-
-    useEffect(() => { firstRun() }, [location] );
-
-
-    return {coffee, dinner, bar, general, searchAPI};
+    return { searchAPI };
 
 };

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavigationStackProp } from 'react-navigation-stack';
 import { View, StyleSheet, ScrollView } from 'react-native';
 import { Text, ButtonGroup } from '@rneui/themed';
@@ -12,9 +12,21 @@ import useLocation from '../hooks/useLocation';
 
 
 const IndexScreen = ({navigation}: {navigation: NavigationStackProp}) => {
-    
-    const { coffee, dinner, bar } = useSearchResults();
+    //Check when you have requests that this works in general and solves the problem with multiply requests.
+    const [coffee, setCoffee]: [EateryInfo[], Function] = useState(null);
+    const [dinner, setDinner]: [EateryInfo[], Function] = useState(null);
+    const [bar, setBar]: [EateryInfo[], Function] = useState(null);
+    const { searchAPI } = useSearchResults();
     useLocation();
+
+    const firstRun = () => {
+        searchAPI('coffee', setCoffee, undefined, undefined);
+        searchAPI('dinner', setDinner, undefined, undefined);
+        searchAPI('bar', setBar, undefined, undefined);
+    };
+
+    useEffect(() => { firstRun() }, []); //Add location check??? 
+    
     return(
         <ScrollView style = {styles.main}>
             <View style = { styles.block }>
