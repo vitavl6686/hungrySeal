@@ -17,12 +17,14 @@ const IndexScreen = ({navigation}: {navigation: NavigationStackProp}) => {
     const [dinner, setDinner]: [EateryInfo[], Function] = useState(null);
     const [bar, setBar]: [EateryInfo[], Function] = useState(null);
     const { searchAPI } = useSearchResults();
-    useLocation();
+    const { locationWorker } = useLocation();
+    
 
     const firstRun = () => {
         searchAPI('coffee', setCoffee, undefined, undefined);
         searchAPI('dinner', setDinner, undefined, undefined);
         searchAPI('bar', setBar, undefined, undefined);
+        locationWorker();
     };
 
     useEffect(() => { firstRun() }, []); //Add location check??? 

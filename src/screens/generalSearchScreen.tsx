@@ -13,8 +13,7 @@ import PlaceDetails from "../components/index/placeDetails";
 const GeneralSearchScreen = ({navigation}: {navigation: NavigationStackProp}) => {
     const name = navigation.getParam('term');
     const { searchAPI } = useSearchResults();
-    const { locationState } = useContext(locationContext);
-    const { location } = locationState
+    const { location } = useContext(locationContext).locationState;
 
     const [general, setGeneral]: [EateryInfo[], Function] = useState(null);
 
