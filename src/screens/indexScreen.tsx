@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { NavigationStackProp } from 'react-navigation-stack';
 import { View, StyleSheet, ScrollView } from 'react-native';
 import { Text, ButtonGroup } from '@rneui/themed';
@@ -8,6 +8,7 @@ import Block from '../components/index/block';
 
 import useSearchResults, { EateryInfo } from '../hooks/useSearchResults';
 import useLocation from '../hooks/useLocation';
+import locationContext from '../context/locationContext';
 
 
 
@@ -18,16 +19,26 @@ const IndexScreen = ({navigation}: {navigation: NavigationStackProp}) => {
     const [bar, setBar]: [EateryInfo[], Function] = useState(null);
     const { searchAPI } = useSearchResults();
     const { locationWorker } = useLocation();
+    const { locationState } = useContext(locationContext);
     
 
     const firstRun = () => {
-        searchAPI('coffee', setCoffee, undefined, undefined);
-        searchAPI('dinner', setDinner, undefined, undefined);
-        searchAPI('bar', setBar, undefined, undefined);
-        locationWorker();
+        console.log("again")
+        if (locationState.location === null) {
+            locationWorker();
+            searchAPI('coffee', setCoffee, undefined, undefined);
+            searchAPI('dinner', setDinner, undefined, undefined);
+            searchAPI('bar', setBar, undefined, undefined);
+            
+        }
+        else {
+            searchAPI('coffee', setCoffee, locationState.location.coords.latitude, locationState.location.coords.longitude);
+            searchAPI('dinner', setDinner, locationState.location.coords.latitude, locationState.location.coords.longitude);
+            searchAPI('bar', setBar, locationState.location.coords.latitude, locationState.location.coords.longitude);
+        }
     };
 
-    useEffect(() => { firstRun() }, []); //Add location check??? 
+    useEffect(() => { firstRun() }, [locationState.location]); 
     
     return(
         <ScrollView style = {styles.main}>

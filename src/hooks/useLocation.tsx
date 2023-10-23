@@ -35,7 +35,7 @@ export default () => {
     
 
     useEffect(() => {
-        console.log('location changed')
+        console.log('location changed: ', location);
         }, [location]);
 
     return { locationWorker };
