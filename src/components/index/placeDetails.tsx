@@ -12,8 +12,6 @@ const PlaceDetails = ({data, imageStyle, navigation}: {data: EateryInfo, imageSt
     var displayed_name = "";
     if (data.name.length > 20) {displayed_name = data.name.substring(0, 17) + "..."} else {displayed_name = data.name};
 
-    
-
     return(
         <View style={ styles.outer }>
             <TouchableOpacity
