@@ -6,37 +6,41 @@ import locationContext from '../context/locationContext';
 
 export default () => {
 
-    const {locationState, setLocation} = useContext(locationContext);
+    const {locationState, actions} = useContext(locationContext);
     const { location, errorMessage } = locationState;
 
     const permissionCollector = async () => {
         try{
             const { granted } = await requestForegroundPermissionsAsync();
             if (!granted) {
-                console.log("User rejected location use.")
+                console.log("User rejected location use.");
+                actions.setErrorMessage("You should allow location detection for better user experience.");
             }
         }
         catch(err) {
-            console.log("Something went wrond when requestion permission for location use.")
-        }
+            console.log("Something went wrong when requestion permission for location use. Log: ", err);
+            actions.setErrorMessage("Something went wrong during location detection.");
+
+        };
+        actions.setErrorMessage("");
     };
 
     const getLocation = async() => {
-        const responce = await getCurrentPositionAsync({ accuracy: Accuracy.BestForNavigation });
-        setLocation(responce);
-        console.log('location detected again')
+        try {
+            const responce = await getCurrentPositionAsync({ accuracy: Accuracy.BestForNavigation });
+            actions.setLocation(responce);
+        }
+
+        catch(err) {
+            console.log("Something went wrong during location detection: ", err);
+            actions.setErrorMessage("Something went wrong during location detection.");
+        }
     }
 
     const locationWorker = async () => {
         permissionCollector();
         getLocation();
     }
-
-    
-
-    useEffect(() => {
-        console.log('location changed')
-        }, [location]);
 
     return { locationWorker };
 }

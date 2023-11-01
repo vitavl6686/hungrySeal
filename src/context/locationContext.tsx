@@ -4,7 +4,10 @@ import React, { useReducer, useState } from 'react';
 
 export type LocationContext = {
     locationState: LocationState,
-    setLocation: Function
+    actions: {
+        setLocation: Function,
+        setErrorMessage: Function
+    }
 }
 
 export type LocationState = {
@@ -12,7 +15,7 @@ export type LocationState = {
     errorMessage: String
 }
 
-const locationContext = React.createContext<LocationContext>(null); //add type when you realise what it is
+const locationContext = React.createContext<LocationContext>(null); 
 
 
 
@@ -22,11 +25,16 @@ export const LocationContextProvider = ({children}: {children: React.ReactNode})
     
 
     const setLocation = (newLocation: LocationObject) => {
-        setLocationState({...locationState, location: newLocation })
+        setLocationState({...locationState, location: newLocation });
     }
 
+    const setErrorMessage = (message: String) => {
+        setLocationState({...locationState, errorMessage: message });
+    }
 
-    return <locationContext.Provider value = {{ locationState, setLocation }}>
+    
+
+    return <locationContext.Provider value = {{ locationState, actions: {setLocation, setErrorMessage} }}>
         {children}
     </locationContext.Provider>;
 }

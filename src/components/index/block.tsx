@@ -25,7 +25,7 @@ const Block = ({name, data, navigation}: {name: string, data: Array<EateryInfo>,
                         keyExtractor={(restaurant) => restaurant.id}
                         renderItem= {({item}) => {
                             return(
-                                <View>
+                                <View style = {{width: 300}}>
                                     <PlaceDetails data = { item } imageStyle = { styles.image } navigation = { navigation } />
                                 </View>
                         );}}
@@ -38,7 +38,7 @@ const Block = ({name, data, navigation}: {name: string, data: Array<EateryInfo>,
 
 const styles = StyleSheet.create({
     outer: {
-        marginVertical: 5
+        marginVertical: 5,
     },
 
     blockName: {

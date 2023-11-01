@@ -9,10 +9,8 @@ export type  EateryInfo = {
     name: string
     image_url: string
     rating: number
-    review_count: number
-    coordinates: {
-        distance: number
-    }
+    review_count: number,
+    distance: number
 }
 
 
@@ -40,7 +38,7 @@ export default () => {
                 console.log('request')
                     const response = await yelp.get('/search', {
                         params: {
-                            limit: 10,
+                            limit: 5,
                             term:  searchTerm ,
                             sort_by: 'rating',
                             open_now: true,
@@ -48,7 +46,7 @@ export default () => {
                         }
                     });
                     const final_result : EateryInfo[] = clean_results(response.data.businesses);
-                    console.log(final_result[2].coordinates)
+                    
                     callback(final_result);
                     return 0;
                 }

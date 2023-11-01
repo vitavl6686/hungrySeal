@@ -1,6 +1,9 @@
 import React from 'react';
 import { View, StyleSheet, Image, TouchableOpacity, FlatList } from 'react-native';
 import { NavigationStackProp } from 'react-navigation-stack';
+import StarRating from 'react-native-star-rating-widget';
+
+
 
 
 
@@ -10,8 +13,8 @@ import { EateryInfo } from '../../hooks/useSearchResults';
 
 const PlaceDetails = ({data, imageStyle, navigation}: {data: EateryInfo, imageStyle: object, navigation: NavigationStackProp}) => {
     var displayed_name = "";
-    if (data.name.length > 20) {displayed_name = data.name.substring(0, 17) + "..."} else {displayed_name = data.name};
 
+    if (data.name.length > 20) {displayed_name = data.name.substring(0, 17) + "..."} else {displayed_name = data.name};
     
 
     return(
@@ -19,16 +22,29 @@ const PlaceDetails = ({data, imageStyle, navigation}: {data: EateryInfo, imageSt
             <TouchableOpacity
                 onPress={() => navigation.navigate('place', {id: data.id})}>
                 <View style = {[styles.mainContent, styles.elevation]}>
-                    <Image
-                        source = {{ uri: data.image_url }}
-                        style = { imageStyle }
-                    />
+                    { data.image_url !== "" ? 
+                        <Image
+                            source = {{ uri: data.image_url }}
+                            style = { imageStyle }
+                        />
+                    :   <Image
+                            source = {require("./../../../assets/test_image_1.jpeg")}
+                            style = { imageStyle }
+                        />
+                    
+                    }
+                    
                     <View style = {styles.textView }>
                         <Text style = { styles.placeName }>{ displayed_name }</Text>
+                        <StarRating 
+                            rating = { data.rating }
+                            onChange={() => {}}
+                            color= 'black'
+                            animationConfig={{duration: 0}}
+                        />                
+                        <Text style = { styles.reviewDetails }>{ data.review_count} reviews</Text>
+                        <Text style = { styles.distanceDetails}>{ data.distance.toFixed() } metres</Text>
 
-                        <Text style = { styles.details }>Rating: {data.rating}</Text>
-                        <Text style = { styles.details }>Number of reviews: { data.review_count}</Text>
-                        <Text>Distance: { data.coordinates.distance }</Text>
                     </View>
                 </View>
             </TouchableOpacity>
@@ -38,7 +54,7 @@ const PlaceDetails = ({data, imageStyle, navigation}: {data: EateryInfo, imageSt
 
 const styles = StyleSheet.create({
     outer: {
-        margin: 6,
+        margin: 6
     },
 
     mainContent: {
@@ -60,16 +76,25 @@ const styles = StyleSheet.create({
         margin: 5
     },
 
+    reviewDetails: {
+        letterSpacing: 0.2,
+        fontSize: 18,
+        fontStyle: 'italic'
+    },
+
+    distanceDetails: {
+        letterSpacing: 0.2,
+        fontSize: 19,
+        fontWeight: '700',
+        fontStyle: 'italic'
+    },
+
     placeName: {
         fontVariant: 'small-caps' as any ,
         letterSpacing: 0.2,
-        fontSize: 18,
-        fontWeight: '600'
-    },
-
-    details: {
-        letterSpacing: 0.2,
-        fontSize: 18,
+        fontSize: 20,
+        fontWeight: '600',
+        marginBottom: 10
     }
 });
 

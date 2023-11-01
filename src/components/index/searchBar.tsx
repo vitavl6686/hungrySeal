@@ -24,8 +24,8 @@ const SearchBarCustom = ({navigation}: {navigation: NavigationStackProp}) => {
                 value = { userSearch }
                 onChangeText = {(new_text) => setUserSearch(new_text)}
                 onSubmitEditing = { () => {
-                    setUserSearch("");
-                    navigation.navigate('generalSearch', {term: userSearch});
+                        setUserSearch("");
+                        navigation.navigate('generalSearch', {term: userSearch});
                     }}
             />
 
@@ -39,6 +39,8 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         borderRadius: 5,
         flexDirection: 'row',
+        margin: 5,
+        width: 400,
         alignContent: 'space-between'
     },
 
@@ -47,7 +49,7 @@ const styles = StyleSheet.create({
         width: 400,
         fontSize: 19,
         fontVariant: 'small-caps',
-        padding: 10
+        padding: 0
     }
 });
 export default SearchBarCustom;
