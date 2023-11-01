@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, StyleSheet, Image, TouchableOpacity, FlatList } from 'react-native';
 import { NavigationStackProp } from 'react-navigation-stack';
-import StarRating from 'react-native-star-rating';
+import StarRating from 'react-native-star-rating-widget';
 
 
 
@@ -15,24 +15,33 @@ const PlaceDetails = ({data, imageStyle, navigation}: {data: EateryInfo, imageSt
     var displayed_name = "";
 
     if (data.name.length > 20) {displayed_name = data.name.substring(0, 17) + "..."} else {displayed_name = data.name};
+    
 
     return(
         <View style={ styles.outer }>
             <TouchableOpacity
                 onPress={() => navigation.navigate('place', {id: data.id})}>
                 <View style = {[styles.mainContent, styles.elevation]}>
-                    <Image
-                        source = {{ uri: data.image_url }}
-                        style = { imageStyle }
-                    />
+                    { data.image_url !== "" ? 
+                        <Image
+                            source = {{ uri: data.image_url }}
+                            style = { imageStyle }
+                        />
+                    :   <Image
+                            source = {require("./../../../assets/test_image_1.jpeg")}
+                            style = { imageStyle }
+                        />
+                    
+                    }
+                    
                     <View style = {styles.textView }>
                         <Text style = { styles.placeName }>{ displayed_name }</Text>
                         <StarRating 
-                            rating = {data.rating}
-                            disabled
-                            starSize={30}
-                        />
-                        
+                            rating = { data.rating }
+                            onChange={() => {}}
+                            color= 'black'
+                            animationConfig={{duration: 0}}
+                        />                
                         <Text style = { styles.reviewDetails }>{ data.review_count} reviews</Text>
                         <Text style = { styles.distanceDetails}>{ data.distance.toFixed() } metres</Text>
 
